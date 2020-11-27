@@ -16,6 +16,7 @@ const price = require("./price")
 const passenger = require("./passenger")
 const season = require("./season")
 const market = require("./market")
+const booking = require("./bookings")
 //  /api
 const {getAccessToRoute} = require("../middlewares/authorization/auth")
 
@@ -35,5 +36,6 @@ router.use("/price",getAccessToRoute, price)
 router.use("/passenger",getAccessToRoute, passenger)
 router.use("/season",getAccessToRoute, season)
 router.use("/market", getAccessToRoute,market)
+router.use("/booking", getAccessToRoute, booking)
 
 module.exports = router;

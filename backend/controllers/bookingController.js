@@ -1,13 +1,16 @@
 const asyncErrorWrapper = require("express-async-handler");
 const CustomError = require("../Helpers/error/CustomError");
 const bookingService = require("../services/bookingService");
-const cruise = require("../models/cruise")
-var moment = require("moment")
 var tokenHelper = require('../Helpers/authorization/tokenHelpers')
+const agencyService = require('../services/agency-service')
 
 const createBooking = asyncErrorWrapper( async (req,res,next) =>{
 
     const booking = req.body
+
+    var decoded = tokenHelper.verifyToken(req.headers.cookie)
+    var agency = agencyService.find(decoded._id)
+    booking.agency = agency
     // cruise.checkInDate = moment(req.body.checkInDate, "DD-MM-YYYY hh:mm").format('LLL')
     // cruise.checkOutDate = moment(req.body.checkOutDate, "DD-MM-YYYY hh:mm").format('LLL')
 

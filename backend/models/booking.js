@@ -36,4 +36,4 @@ BookingSchema.pre("save", function(next){
 // CruiseSchema.pre('find', function(){
 //     this.populate("vessel")
 // })
-module.exports = mongoose.model("Cruise", CruiseSchema)
+module.exports = mongoose.model("Booking", BookingSchema)

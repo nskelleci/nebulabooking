@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const {addPassenger, getPassengersByBooking} = require("../controllers/passengerController")
+const {addPassenger, getPassenger} = require("../controllers/passengerController")
 
 router.post("/add", addPassenger)
 
-router.get("/booking/:bookingid", getPassengersByBooking)
+router.get("/getPassenger/:passportNo", getPassenger)
 
 
 module.exports = router
