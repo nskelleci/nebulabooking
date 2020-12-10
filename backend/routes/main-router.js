@@ -33,9 +33,9 @@ router.use("/cabinCategories",getAccessToRoute, cabinCategorie)
 router.use("/bedtype",getAccessToRoute,bedType)
 router.use("/cabin",getAccessToRoute, cabin)
 router.use("/price",getAccessToRoute, price)
-router.use("/passenger",getAccessToRoute, passenger)
+router.use("/passenger",getAccessToRoute,passenger)
 router.use("/season",getAccessToRoute, season)
 router.use("/market", getAccessToRoute,market)
-router.use("/booking", getAccessToRoute, booking)
+router.use("/booking" ,booking)
 
 module.exports = router;

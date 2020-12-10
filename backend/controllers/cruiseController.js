@@ -23,7 +23,6 @@ const addCruise = asyncErrorWrapper( async (req,res,next) =>{
 });
 
 const updateCruise = asyncErrorWrapper( async(req,res,next)=>{
-
     const updatedCruise= await cruiseService.update(req.params.id, req.body)
 
     if(!updatedCruise) return next(new CustomError("Cruise couldn't updated"),400)
@@ -32,7 +31,6 @@ const updateCruise = asyncErrorWrapper( async(req,res,next)=>{
         message : "Cruise Updated Successfully",
         data : updatedCruise
     })
-
 });
 
 const getCruises = asyncErrorWrapper( async (req,res,next) =>{

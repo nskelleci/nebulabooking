@@ -15,7 +15,7 @@ const getAccessToRoute = (req,res,next)=>{
             return next(new CustomError("You are not authorized to access", 401))
         }
         req.agency = {
-            id : decoded.id,
+            _id : decoded.id,
             agencyCode : decoded.agencyCode,
             companyName : decoded.companyName,
             email : decoded.email,

@@ -1,4 +1,4 @@
-const { verify } = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 
 const sendJwtToClient = (agency, res)=>{
     //GENERATE JWT
@@ -18,7 +18,7 @@ const sendJwtToClient = (agency, res)=>{
                 message : 'Agency Logged-in Successfully',
                 // access_token : token,
                 data :{
-                    id : agency._id,
+                    _id : agency._id,
                     agencyCode : agency.agencyCode,
                     email : agency.email,
                     companyName : agency.companyName,
@@ -35,13 +35,16 @@ const isTokenIncluded = (req)=>{
 
 const verifyToken = (req,res,next) =>{
     let accessToken = getAccessTokenFromHeader(req)
-    let payload = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET)
+    
+    let payload = jwt.verify(accessToken, process.env.JWT_SECRET_KEY)
     return payload 
 }
 
 const getAccessTokenFromHeader = (req) =>{
-    const cookie = req.headers.cookie;
-    const access_token = cookie.split("access_token=")[1];
+    let cookie="";
+    cookie = req.headers.cookie;
+    const access_token = req.headers.cookie.split("access_token=")[1];
+
     return access_token;
 }
 

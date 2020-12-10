@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 
-const {createBooking, getAllbookingsbyagency} = require("../controllers/bookingController")
+const {createBooking, updateBooking, getAllbookingsbyagency, getBooking} = require("../controllers/bookingController")
 
 
 router.get("/mybookings/", getAllbookingsbyagency)
 router.post("/createBooking/", createBooking)
-//router.put("/update/:id", updateBedType)
-
+router.put("/updateBooking/:booking", updateBooking)
+router.get("/getBooking/:booking", getBooking)
 
 
 module.exports = router

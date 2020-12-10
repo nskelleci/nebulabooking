@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
+const cryptoRandomString = require('crypto-random-string');
 
 const Schema = mongoose.Schema;
 
 
 const BookingSchema = new Schema({
     refNo : {
+        type : String
+    },
+    status : {
         type : String
     },
     agency : {
@@ -25,8 +29,13 @@ const BookingSchema = new Schema({
     cruise : {
         type: Schema.Types.ObjectId,
         ref : "Cruise"
-    }
-})
+    },
+    
+},
+{ 
+    timestamps: true 
+}
+)
 
 BookingSchema.pre("save", function(next){
     this.refNo = "BRN-" + cryptoRandomString({length: 6, type: 'numeric'});

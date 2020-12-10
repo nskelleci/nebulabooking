@@ -90,7 +90,7 @@ AgencySchema.methods.generateJwtFromAgency = function(){
     const {JWT_SECRET_KEY, JWT_EXPIRE} = process.env;
 
     const payload = {
-        id : this._id,
+        _id : this._id,
         agencyCode : this.agencyCode,
         email : this.email,
         companyName : this.companyName,

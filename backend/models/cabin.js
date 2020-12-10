@@ -33,4 +33,8 @@ const CabinSchema = new Schema({
     }
 })
 
+CabinSchema.pre('find', function(){
+    this.populate(["bedType","cabinCategory"])
+})
+
 module.exports = mongoose.model("Cabin",CabinSchema)

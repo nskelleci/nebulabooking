@@ -33,11 +33,11 @@ const BlockedCabinSchema = new Schema({
     },
     blockReason : {
         type : String,
-        enum : ['OnProcess', 'Sold', 'Payment Pending', 'Reserved'],
+        enum : ['Sold', 'Payment Pending', 'Reserved'],
     },
     blockedUntil : {
         type : Date,
-        required : [true, "Provide a date"]
+        required : [false, "Provide a date"]
     }
 
 })
@@ -74,7 +74,8 @@ const CruiseSchema = new Schema({
 })
 
 
-// CruiseSchema.pre('find', function(){
-//     this.populate("vessel")
-// })
+CruiseSchema.pre('find', function(){
+    this.populate(["vessel","cruiseType"])
+})
+
 module.exports = mongoose.model("Cruise", CruiseSchema)

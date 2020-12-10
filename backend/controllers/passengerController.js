@@ -32,7 +32,7 @@ const getPassenger = asyncErrorWrapper( async (req,res,next) =>{
     }
     const passenger = await passengerService.findOneby(options)
 
-    if(!passenger) return next(new CustomError("Passenger couldn't found", 400))
+    if(!passenger) return next(new CustomError("Passenger couldn't found", 200))
 
     res.json({
         success : true,

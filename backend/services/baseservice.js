@@ -4,7 +4,7 @@ async findAll() {
 }
 
 async findAll(options={undefined}) {
-    return this.model.find(options.filter).populate(options.populate);
+    return this.model.find(options.filter).populate(options.populate).sort( { "createdAt": -1 } );
 }
 
 async findOneby(options={undefined}){
