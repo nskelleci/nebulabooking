@@ -60,5 +60,7 @@ module.exports = {
     sendJwtToClient,
     isTokenIncluded,
     getAccessTokenFromHeader,
-    verifyToken
+    verifyToken,
+    clearCookie
+
 };
