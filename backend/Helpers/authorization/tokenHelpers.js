@@ -9,8 +9,8 @@ const sendJwtToClient = (agency, res)=>{
             .cookie('access_token', token,{
                 httpOnly : true,
                 expires : new Date(Date.now() + parseInt(JWT_COOKIE)*1000*60),
-                sameSite : 'strict',
-                //secure : true
+                sameSite : 'none',
+                secure : true
                 //secure : NODE_ENV==="DEVELOPMENT" ? false : true
             })
             .json({
@@ -60,6 +60,5 @@ module.exports = {
     sendJwtToClient,
     isTokenIncluded,
     getAccessTokenFromHeader,
-    verifyToken,
-    clearCookie
+    verifyToken
 };
