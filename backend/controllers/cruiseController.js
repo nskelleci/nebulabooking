@@ -61,13 +61,28 @@ const getCruisesbyCruiseType = asyncErrorWrapper (async (req,res,next) => {
         data : cruises
     })
 
-}
+});
 
-)
+const cruiseDetail = asyncErrorWrapper (async (req,res,next) => {
+    const cruiseid = req.params.id
+
+    const options = {
+        filter : {_id:cruiseid},
+        populate : ["ports", "vessel", "cruiseType", "season", "schedule.port"]
+    }
+    const cruises = await cruiseService.findAll(options)
+    res.json({
+        success:true,
+        message : "Cruises Detail fetched",
+        data : cruises
+    })
+
+});
 
 module.exports = {
     addCruise,
     getCruises,
     updateCruise,
-    getCruisesbyCruiseType
+    getCruisesbyCruiseType,
+    cruiseDetail
 }

@@ -41,16 +41,25 @@ const verifyToken = (req,res,next) =>{
 }
 
 const getAccessTokenFromHeader = (req) =>{
-    let cookie="";
-    cookie = req.headers.cookie;
     const access_token = req.headers.cookie.split("access_token=")[1];
-
     return access_token;
+}
+
+const clearCookie = (req,res,next) =>{
+    res.status(200)
+        .cookie('access_token', "",{
+            httpOnly : true,
+            expires : new Date(0),
+            sameSite : 'strict',
+        })
+        
+    return true
 }
 
 module.exports = {
     sendJwtToClient,
     isTokenIncluded,
     getAccessTokenFromHeader,
-    verifyToken
+    verifyToken,
+    clearCookie
 };

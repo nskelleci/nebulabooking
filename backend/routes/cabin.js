@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const {addCabin, getAllCabinsbyVessel,getAvailableCabinsBycabinCategory, getAllAvailableCabins, updateCabin} = require("../controllers/cabinController")
+const {addCabin,getAllCabins, getAllCabinsbyVessel,getAvailableCabinsBycabinCategory, getAllAvailableCabins, updateCabin} = require("../controllers/cabinController")
 
-
+router.get("/getAll", getAllCabins)
 router.get("/vessel/:vessel", getAllCabinsbyVessel)
 router.post("/add", addCabin)
 router.put("/update/:id", updateCabin)

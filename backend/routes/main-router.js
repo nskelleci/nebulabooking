@@ -17,10 +17,13 @@ const passenger = require("./passenger")
 const season = require("./season")
 const market = require("./market")
 const booking = require("./bookings")
+const logout = require("./logout")
+const blockedCabins = require("./blockedCabin")
+const adminDashboard = require("./admin-dashboard")
 //  /api
-const {getAccessToRoute} = require("../middlewares/authorization/auth")
+const {getAccessToRoute} = require("../middlewares/authorization/auth");
 
-
+router.use("/adminDashboard", adminDashboard)
 router.use("/agency",getAccessToRoute, agency);
 router.use("/auth", auth);
 router.use("/vessel",getAccessToRoute,vessel)
@@ -28,6 +31,7 @@ router.use("/port",getAccessToRoute, port)
 router.use("/country",getAccessToRoute, country)
 router.use("/cruiseType",getAccessToRoute, cruiseType)
 router.use("/cruise",getAccessToRoute,cruise)
+router.use("/blockedCabin", blockedCabins)
 router.use("/agencytype",getAccessToRoute, agencyType)
 router.use("/cabinCategories",getAccessToRoute, cabinCategorie)
 router.use("/bedtype",getAccessToRoute,bedType)
@@ -36,6 +40,7 @@ router.use("/price",getAccessToRoute, price)
 router.use("/passenger",getAccessToRoute,passenger)
 router.use("/season",getAccessToRoute, season)
 router.use("/market", getAccessToRoute,market)
-router.use("/booking" ,booking)
+router.use("/booking",booking)
+router.use("/logout",logout)
 
 module.exports = router;

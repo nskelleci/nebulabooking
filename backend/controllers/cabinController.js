@@ -32,6 +32,17 @@ const getAllCabinsbyVessel = asyncErrorWrapper( async(req,res,next)=>{
     })
 });
 
+const getAllCabins = asyncErrorWrapper( async(req,res,next)=>{
+
+    
+    const cabins = await cabinService.findAll()
+    res.json({
+        success:true,
+        message : "All Cabins",
+        data : cabins
+    })
+});
+
 const getAllAvailableCabins = asyncErrorWrapper (async (req,res,next)=>{
     const cruiseid = req.params.cruise
     const cruise = await cruiseService.find(cruiseid)
@@ -59,6 +70,7 @@ const getAvailableCabinsBycabinCategory = asyncErrorWrapper(async (req,res,next)
         const cruise = await cruiseService.find(cruiseid)
         const cabinCategoryId = req.params.cabinCategory
         const cabinCategory = await cabinCategoryService.find(cabinCategoryId)
+        
         const options = {
             populate : ["vessel", "bedType", "cabinCategory"],
             cruise : cruise,
@@ -95,5 +107,6 @@ module.exports = {
     getAllCabinsbyVessel,
     updateCabin,
     getAllAvailableCabins,
+    getAllCabins,
     getAvailableCabinsBycabinCategory
 }

@@ -13,4 +13,8 @@ const PortSchema = new Schema({
     }
 })
 
+PortSchema.pre('find', function(){
+    this.populate()
+})
+
 module.exports = mongoose.model("Port",PortSchema)

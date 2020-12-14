@@ -12,13 +12,14 @@ const createBooking = asyncErrorWrapper( async (req,res,next) =>{
     var decoded = tokenHelper.verifyToken(req)
     var agency = await agencyService.find(decoded._id)
     booking.agency = agency
-    // cruise.checkInDate = moment(req.body.checkInDate, "DD-MM-YYYY hh:mm").format('LLL')
+    // cruise.checkOutDate = moment(req.body.checkInDate, "DD-MM-YYYY hh:mm").format('LLL')
     // cruise.checkOutDate = moment(req.body.checkOutDate, "DD-MM-YYYY hh:mm").format('LLL')
 
     let createdBooking = await bookingService.add(booking);
 
     if(!createBooking) return next(new CustomError("Bookung Couldn't Created",400));
     createdBooking = await createdBooking.populate(['cabin', 'cruise']).execPopulate()
+
     res.json({
         success : true,
         message : "Booking added succesfully",
@@ -77,10 +78,35 @@ const getBooking = asyncErrorWrapper( async (req,res,next) =>{
     })
 });
 
+const getBookingCruiseId = asyncErrorWrapper( async (req,res,next) =>{
+
+    const cruiseid = req.params.id
+     const cruise = await cruiseService.find(cruiseid)
+    if(!cruise) {
+        return next(new CustomError("Cruise couldn't find"),400)
+    }
+    const options = {
+        filter : {cruise},
+        populate : ["agency", "vessel", "cruiseType", "cruise.schedule.port", "cruise","cabin","Passengers"],
+        select : null
+    }
+
+    const booking = await bookingService.findAll(options)
+
+    if(!booking) return next(new CustomError("Booking couldn't found", 200))
+
+    res.json({
+        success: true,
+        data : booking
+    })
+});
+
+
 
 module.exports = {
     createBooking,
     getAllbookingsbyagency,
     updateBooking,
-    getBooking
+    getBooking,
+    getBookingCruiseId
 }
