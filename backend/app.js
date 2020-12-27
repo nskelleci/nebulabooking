@@ -31,7 +31,7 @@ app.use(bodyParser.json())
 var whitelist = ['http://localhost:8080', 'https://nebula-booking-vue.herokuapp.com', '5.182.247.156']
 
 app.use(cors({
-    origin : whitelist[1],
+    origin : whitelist[0],
     credentials : true,
 }))
 

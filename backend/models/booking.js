@@ -30,6 +30,12 @@ const BookingSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref : "Cruise"
     },
+    rosPrice : {
+        type : Number
+    },
+    isRose : {
+        type : Boolean
+    },
     
 },
 { 

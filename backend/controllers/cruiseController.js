@@ -37,7 +37,7 @@ const getCruises = asyncErrorWrapper( async (req,res,next) =>{
 
     const options = {
         filter : null,
-        populate : ["ports", "vessel", "cruiseType", "season", "schedule.port"]
+        populate : ["ports", "vessel", "cruiseType", "season", "schedule.port", "rosCabins.cabin"]
     }
     const cruises = await cruiseService.findAll(options)
     res.json({
@@ -52,7 +52,7 @@ const getCruisesbyCruiseType = asyncErrorWrapper (async (req,res,next) => {
 
     const options = {
         filter : {cruiseType},
-        populate : ["ports", "vessel", "cruiseType", "season", "schedule.port"]
+        populate : ["ports", "vessel", "cruiseType", "season", "schedule.port", "rosCabins.cabin"]
     }
     const cruises = await cruiseService.findAll(options)
     res.json({
@@ -68,7 +68,7 @@ const cruiseDetail = asyncErrorWrapper (async (req,res,next) => {
 
     const options = {
         filter : {_id:cruiseid},
-        populate : ["ports", "vessel", "cruiseType", "season", "schedule.port"]
+        populate : ["ports", "vessel", "cruiseType", "season", "schedule.port", "rosCabins.cabin"]
     }
     const cruises = await cruiseService.findAll(options)
     res.json({

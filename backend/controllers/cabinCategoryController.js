@@ -32,7 +32,7 @@ const getAllCabinCategoriesbyVessel = asyncErrorWrapper( async(req,res,next)=>{
     const vessel = req.params.vessel
     const options = {
         filter : {vessel},
-        populate : "vessel"
+        populate : ["vessel"]
     }
     const cabinCategories = await cabinCategoryService.findAll(options)
     res.json({

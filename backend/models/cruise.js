@@ -20,6 +20,19 @@ const ScheduleItemSchema = new Schema({
     }
 })
 
+const RosCabinSchema = new Schema({
+   
+    cabin : {
+        type : Schema.Types.ObjectId,
+        required : [true, "Please provide a cabin"],
+        ref : "Cabin"
+    },
+    rosPrice : {
+        type : Number,
+        required : [true, 'Please provide ros price']
+    }
+  
+})
 
 const CruiseSchema = new Schema({
     name : {
@@ -48,13 +61,20 @@ const CruiseSchema = new Schema({
     vessel : {
         type : Schema.Types.ObjectId,
         ref : "Vessel"
-    }
+    },
+    rosCabins:[RosCabinSchema]
 })
 
 
 
 CruiseSchema.pre('find', function(){
-    this.populate(["vessel","cruiseType","port"])
+    this.populate(["vessel","cruiseType","port","cabin"])
 })
+
+RosCabinSchema.pre('find', function(){
+    this.populate()
+})
+
+
 
 module.exports = mongoose.model("Cruise", CruiseSchema)

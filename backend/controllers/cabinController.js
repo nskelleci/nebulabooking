@@ -44,25 +44,29 @@ const getAllCabins = asyncErrorWrapper( async(req,res,next)=>{
 });
 
 const getAllAvailableCabins = asyncErrorWrapper (async (req,res,next)=>{
+    console.log(req.params)
+    
     const cruiseid = req.params.cruise
+
+
     const cruise = await cruiseService.find(cruiseid)
-    const cabinCategoryId = req.params.cabinCategoryId
-    const cabinCategory = await cabinCategoryService.find(cabinCategoryId)
+   
     const options = {
         populate : ["vessel", "bedType", "cabinCategory"],
         cruise : cruise,
-        cabinCategory : cabinCategory
-
     }
 
     const cabins = await cabinService.findAvailableCabins(options)
-
+    console.log(cabins);
+    
     res.json({
         success : true,
         message : "Available cabins fetched for selected cruise",
         arrayLength : cabins.length,
         data : cabins
     })
+    
+    
 })
 
 const getAvailableCabinsBycabinCategory = asyncErrorWrapper(async (req,res,next)=>{

@@ -102,11 +102,49 @@ const getBookingCruiseId = asyncErrorWrapper( async (req,res,next) =>{
 });
 
 
+const bookingToday = asyncErrorWrapper( async (req,res,next) =>{
+    var end=new Date();
+    end.setHours(23,59,59,999);
+    var start = new Date();
+    start.setHours(0,0,0,0);
+    console.log({$gte:start,$lt:end});
+
+    const pendingPayment = {
+        filter : {status:"pending payment",createdAt:{"$gte": start, "$lt": end}},
+        populate : ["agency", "vessel", "cruiseType", "cruise.schedule.port", "cruise","cabin","Passengers"],
+        select : null
+    }
+    
+    const sold = {
+        filter : {status:"Sold",createdAt:{"$gte": start, "$lt": end}},
+        populate : ["agency", "vessel", "cruiseType", "cruise.schedule.port", "cruise","cabin","Passengers"],
+        select : null
+    }
+
+    let todayPendingPayment = await bookingService.findToday(pendingPayment)
+    let todaySold = await bookingService.findToday(sold)
+
+    todayPendingPayment=todayPendingPayment.length
+    todaySold=todaySold.length
+
+    let todayData={
+        todayPendingPayment,
+        todaySold
+    }
+
+    res.json({
+        success: true,
+        data : todayData
+    })
+});
+
+
 
 module.exports = {
     createBooking,
     getAllbookingsbyagency,
     updateBooking,
     getBooking,
-    getBookingCruiseId
+    getBookingCruiseId,
+    bookingToday
 }
