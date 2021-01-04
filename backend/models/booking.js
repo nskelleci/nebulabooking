@@ -36,6 +36,9 @@ const BookingSchema = new Schema({
     isRose : {
         type : Boolean
     },
+    totalPrice : {
+        type : Number
+    },
     
 },
 { 
