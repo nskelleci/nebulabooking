@@ -68,11 +68,15 @@ const CruiseSchema = new Schema({
 
 
 CruiseSchema.pre('find', function(){
-    this.populate(["vessel","cruiseType","port","cabin"])
+    this.populate(["vessel","cruiseType","schedule.port","cabin"])
 })
 
 RosCabinSchema.pre('find', function(){
     this.populate()
+})
+
+ScheduleItemSchema.pre('find', function(){
+    this.populate(["port"])
 })
 
 

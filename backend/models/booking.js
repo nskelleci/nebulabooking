@@ -39,6 +39,18 @@ const BookingSchema = new Schema({
     totalPrice : {
         type : Number
     },
+    agencyCost : {
+        type: Number
+    },
+    paidAmount : {
+        type: Array
+    },
+    balance: {
+        type: Number
+    },
+    profit: {
+        type: Number
+    },
     
 },
 { 

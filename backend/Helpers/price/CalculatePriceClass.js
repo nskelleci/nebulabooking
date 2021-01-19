@@ -76,8 +76,11 @@ class PriceFrontEnd extends Calculate {
                 if (this.isRose) {
                     totalPayment += Number(this.rosPrice);
                 } else {
+                    console.log("this.price",this.price);
+                        console.log("this.tax",this.tax);
                     totalPayment += Number(this.price);
                     totalPayment += Number(this.tax);
+
                 }
             }
 
@@ -104,9 +107,11 @@ class PriceFrontEnd extends Calculate {
                 if (this.isRose) {
                     totalPayment += Number(this.rosPrice);
                 } else {
-                    if (adltCount >= 2) {
+                    if (adltCount > 2) {
                         adltCount++;
                         totalPayment += (Number(this.price) - (Number(this.price) * (0.4)));
+                        console.log("this.price",this.price);
+                        console.log("this.tax",this.tax);
                         totalPayment += this.tax;
                     } else {
                         adltCount++;
@@ -218,7 +223,7 @@ class PriceBackEnd extends Calculate {
             if (this.isRose) {
                 totalPayment += Number(this.rosPrice);
             } else {
-                if (adultCount >= 2) {
+                if (adultCount > 2) {
                     if (age) {
                         adultCount++;
                         totalPayment += (Number(this.price) - (Number(this.price) * (0.4)));

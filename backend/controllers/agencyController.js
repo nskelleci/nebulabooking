@@ -32,6 +32,19 @@ const updateAgency = asyncErrorWrapper( async(req,res,next)=>{
 
 });
 
+const getAgency = asyncErrorWrapper( async(req,res,next)=>{
+
+    const options = {
+        filter : req.decoded._id,
+        populate : ["agencyType", "market"]
+    }
+    const agency = await AgencyService.find(options)
+    res.json({
+        success:true,
+        message : "Agency",
+        data : agency
+    })
+})
 
 const getAllAgencies = asyncErrorWrapper( async(req,res,next)=>{
 
@@ -53,4 +66,4 @@ const tokentest = (req,res,next)=>{
     })
 }
 
-module.exports = {createAgency, tokentest, updateAgency, getAllAgencies};
+module.exports = {createAgency, tokentest, updateAgency, getAllAgencies, getAgency};

@@ -24,6 +24,24 @@ const AgencySchema = new Schema({
         maxlength : [100,"Company name length over (100) character limit"],
         required : [true, "Please provide the company name"],
     },
+    companyFullName : {
+        type : String,
+        minlength : [3, "Company full name lenght can't be less than 3 character"],
+        maxlength : [100,"Company full name length over (100) character limit"],
+        required : [true, "Please provide the company full name"],
+    },
+    taxOffice : {
+        type : String,
+        minlength : [3, "Tax office lenght can't be less than 3 character"],
+        maxlength : [100,"Tax office length over (100) character limit"],
+        required : [true, "Please provide the tax office"],
+    },
+    taxNumber : {
+        type : String,
+        minlength : [3, "Tax number lenght can't be less than 3 character"],
+        maxlength : [100,"Tax number length over (100) character limit"],
+        required : [true, "Please provide the tax number"],
+    },
     address : {
         type : String,
         minlength : [3, "Company adddress lenght can't be less than 3 character"],
@@ -85,7 +103,9 @@ AgencySchema.pre("save", function(next){
     this.agencyCode = "MCA-" + cryptoRandomString({length: 6, type: 'numeric'});
     next();
 })
-
+AgencySchema.pre('find', function(){
+    this.populate(["agencyType"])
+})
 AgencySchema.methods.generateJwtFromAgency = function(){
     const {JWT_SECRET_KEY, JWT_EXPIRE} = process.env;
 
