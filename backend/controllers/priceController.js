@@ -92,7 +92,7 @@ const calculateFrontEndPrice = asyncErrorWrapper(async (req, res, next) => {
     
 
     req.body.selectedCabin.forEach(element => {
-        let calculatePrice = new CalculatePrice.PriceFrontEnd(cabinPrice, tax, element.rosPrice, element.isRose, Number(element.numberOfAdult), Number(element.numberOfChild));
+        let calculatePrice = new CalculatePrice.PriceFrontEnd(cabinPrice, tax, element.rosPrice, element.isRos, Number(element.numberOfAdult), Number(element.numberOfChild));
         let calculatedPriceWithCabin = {
             cabinNumber: null,
             totalPassengers: 0,
@@ -144,13 +144,13 @@ const calculateBackEndPrice = asyncErrorWrapper(async (req, res, next) => {
         let cabinPrice = prices[0].endUserPrice-tax;
         
         let rosPrice = element.rosPrice;
-        let isRose = element.isRose;
+        let isRos = element.isRos;
         let passengers = element.Passengers;
 
         let cabinNumber = Number(element.cabin.number);
         let passengersCount = Number(element.Passengers.length);
 
-        let calculatePrice = new CalculatePrice.PriceBackEnd(cabinPrice, tax, rosPrice, isRose, passengers).calculate();
+        let calculatePrice = new CalculatePrice.PriceBackEnd(cabinPrice, tax, rosPrice, isRos, passengers).calculate();
 
         let data = {
             cabinNumber,
@@ -158,7 +158,6 @@ const calculateBackEndPrice = asyncErrorWrapper(async (req, res, next) => {
             passengersCount
         }
         bookingPrice.push(data);
-        console.log("bookingPrice", bookingPrice);
     }
 
     res.json({
@@ -191,10 +190,10 @@ const calculateBackEndPriceObject = asyncErrorWrapper(async (req, res, next) => 
     let cabinPrice = prices[0].endUserPrice-tax;
     
     let rosPrice = booking.rosPrice;
-    let isRose = booking.isRose;
+    let isRos = booking.isRos;
     let passengers = booking.Passengers;
 
-    calculatePrice=new CalculatePrice.PriceBackEnd(cabinPrice, tax, rosPrice, isRose, passengers).calculate()
+    calculatePrice=new CalculatePrice.PriceBackEnd(cabinPrice, tax, rosPrice, isRos, passengers).calculate()
 
     res.json({
         success: true,

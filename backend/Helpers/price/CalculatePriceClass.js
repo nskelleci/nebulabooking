@@ -1,29 +1,29 @@
 
 class Calculate {
-    constructor(price, tax, rosPrice, isRose) {
+    constructor(price, tax, rosPrice, isRos) {
         this.price = price,
             this.tax = tax,
             this.rosPrice = rosPrice,
-            this.isRose = isRose
+            this.isRos = isRos
     }
 }
 
 /**
  * @author ridvancakirtr
  * @since 28.12.2020
- * @class (price, tax, rosPrice, isRose, adultCount, childCount)
+ * @class (price, tax, rosPrice, isRos, adultCount, childCount)
  * @memberof Calculate#CalculatePriceFrontEnd
  * @param {number}   const price
  * @param {number}   const tax
  * @param {number}   const rosPrice
- * @param {boolean}  const isRose
+ * @param {boolean}  const isRos
  * @param {number}   const adultCount
  * @param {number}   const childCount
  */
 
 class PriceFrontEnd extends Calculate {
-    constructor(price, tax, rosPrice, isRose, adultCount, childCount) {
-        super(price, tax, rosPrice, isRose);
+    constructor(price, tax, rosPrice, isRos, adultCount, childCount) {
+        super(price, tax, rosPrice, isRos);
         this.adultCount = adultCount,
         this.childCount = childCount
     }
@@ -47,7 +47,7 @@ class PriceFrontEnd extends Calculate {
     onePersonCabin() {
         let totalPayment = 0;
         if (this.adultCount == 1) {
-            if (this.isRose) {
+            if (this.isRos) {
                 totalPayment += Number(this.rosPrice) * 2;
             } else {
                 totalPayment += Number(this.price);
@@ -57,7 +57,7 @@ class PriceFrontEnd extends Calculate {
             return totalPayment;
         }
         if (this.childCount == 1) {
-            if (this.isRose) {
+            if (this.isRos) {
                 totalPayment += Number(this.rosPrice) * 2;
             } else {
                 totalPayment += Number(this.price);
@@ -73,7 +73,7 @@ class PriceFrontEnd extends Calculate {
         let totalPayment = 0;
         if (this.adultCount + this.childCount <= 2) {
             for (let index = 0; index < this.adultCount; index++) {
-                if (this.isRose) {
+                if (this.isRos) {
                     totalPayment += Number(this.rosPrice);
                 } else {
                     console.log("this.price",this.price);
@@ -85,7 +85,7 @@ class PriceFrontEnd extends Calculate {
             }
 
             for (let index = 0; index < this.childCount; index++) {
-                if (this.isRose) {
+                if (this.isRos) {
                     totalPayment += this.rosPrice
                 } else {
                     totalPayment += this.tax;
@@ -104,7 +104,7 @@ class PriceFrontEnd extends Calculate {
         let totalPayment = 0;
         if (this.adultCount + this.childCount <= 4) {
             for (let index = 0; index < this.adultCount; index++) {
-                if (this.isRose) {
+                if (this.isRos) {
                     totalPayment += Number(this.rosPrice);
                 } else {
                     if (adltCount > 2) {
@@ -123,7 +123,7 @@ class PriceFrontEnd extends Calculate {
             }
 
             for (let index = 0; index < this.childCount; index++) {
-                if (this.isRose) {
+                if (this.isRos) {
                     totalPayment += this.rosPrice;
                 } else {
                     totalPayment += this.tax;
@@ -141,18 +141,18 @@ class PriceFrontEnd extends Calculate {
 /**
  * @author ridvancakirtr
  * @since 28.12.2020
- * @class (price, tax, rosPrice, isRose, passengers)
+ * @class (price, tax, rosPrice, isRos, passengers)
  * @memberof Calculate#CalculatePriceBackEnd
  * @param {number}   const price
  * @param {number}   const tax
  * @param {number}   const rosPrice
- * @param {boolean}  const isRose
+ * @param {boolean}  const isRos
  * @param {object}   const passengers
  */
 
 class PriceBackEnd extends Calculate {
-    constructor(price, tax, rosPrice, isRose, passengers) {
-        super(price, tax, rosPrice, isRose);
+    constructor(price, tax, rosPrice, isRos, passengers) {
+        super(price, tax, rosPrice, isRos);
         this.passengers = passengers
     }
 
@@ -176,7 +176,7 @@ class PriceBackEnd extends Calculate {
         let age = this.calculateAgeCongruity(this.passengers[0]);
 
         if (age) {
-            if (this.isRose) {
+            if (this.isRos) {
                 totalPayment += Number(this.rosPrice) * 2;
             } else {
                 totalPayment += Number(this.price);
@@ -184,7 +184,7 @@ class PriceBackEnd extends Calculate {
                 totalPayment += Number(this.tax);
             }
         }else{
-            if (this.isRose) {
+            if (this.isRos) {
                 totalPayment += Number(this.rosPrice) * 2;
             } else {
                 totalPayment += Number(this.price);
@@ -199,7 +199,7 @@ class PriceBackEnd extends Calculate {
         let totalPayment = 0;
         for (let index = 0; index < this.passengers.length; index++) {
             let age = this.calculateAgeCongruity(this.passengers[index]);
-            if (this.isRose) {
+            if (this.isRos) {
                 totalPayment += Number(this.rosPrice)
             } else {
                 if (age) {
@@ -220,7 +220,7 @@ class PriceBackEnd extends Calculate {
         let totalPayment = 0;
         for (let index = 0; index < this.passengers.length; index++) {
             let age = this.calculateAgeCongruity(this.passengers[index])
-            if (this.isRose) {
+            if (this.isRos) {
                 totalPayment += Number(this.rosPrice);
             } else {
                 if (adultCount > 2) {

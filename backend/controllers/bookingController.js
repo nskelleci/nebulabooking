@@ -3,7 +3,8 @@ const CustomError = require("../Helpers/error/CustomError");
 const bookingService = require("../services/bookingService");
 var tokenHelper = require('../Helpers/authorization/tokenHelpers')
 const agencyService = require('../services/agency-service')
-const cruiseService = require("../services/cruise-service")
+const cruiseService = require("../services/cruise-service");
+const { compare } = require("bcryptjs");
 
 const createBooking = asyncErrorWrapper(async (req, res, next) => {
 
@@ -60,18 +61,18 @@ const getAllbookingsbyagencydetail = asyncErrorWrapper(async (req, res, next) =>
 
     let bookings = await bookingService.findAll(options)
 
-    let totalPrice=0
-    let agencyCost=0
-    let balance=0
-    let profit=0
-    bookings.forEach((element)=>{
-        totalPrice+=Number(element.totalPrice);
-        agencyCost+=Number(element.agencyCost);
-        balance+=Number(element.balance);
-        profit+=Number(element.profit);
+    let totalPrice = 0
+    let agencyCost = 0
+    let balance = 0
+    let profit = 0
+    bookings.forEach((element) => {
+        totalPrice += Number(element.totalPrice);
+        agencyCost += Number(element.agencyCost);
+        balance += Number(element.balance);
+        profit += Number(element.profit);
     })
 
-    
+
     //console.log("bookingsssssss", bookings)
 
     res.json({
@@ -84,7 +85,7 @@ const getAllbookingsbyagencydetail = asyncErrorWrapper(async (req, res, next) =>
             profit
         }
     })
-    
+
 });
 
 
@@ -100,10 +101,10 @@ const updateBooking = asyncErrorWrapper(async (req, res, next) => {
     booking.paidAmount.forEach(element => {
         totalPaid += Number(element.price)
     });
-    
-    booking.balance = Math.round((Number(totalPaid)-Number(booking.agencyCost) + Number.EPSILON) * 100) / 100;
 
-    booking.profit = Math.round((Number(booking.totalPrice) - Number(booking.agencyCost)+ Number.EPSILON) * 100) / 100;
+    booking.balance = Math.round((Number(totalPaid) - Number(booking.agencyCost) + Number.EPSILON) * 100) / 100;
+
+    booking.profit = Math.round((Number(booking.totalPrice) - Number(booking.agencyCost) + Number.EPSILON) * 100) / 100;
 
     let updatedBooking = await bookingService.update(req.params.booking, booking)
 
@@ -123,7 +124,7 @@ const getBooking = asyncErrorWrapper(async (req, res, next) => {
 
     const options = {
         filter: { _id: bookingId },
-        populate: ["agency", "agency.agencyType", "vessel", "cruiseType", "season", "cruise", "cabin", "Passengers","schedule"],
+        populate: ["agency", "agency.agencyType", "vessel", "cruiseType", "season", "cruise", "cabin", "Passengers", "schedule"],
         select: null
     }
 
@@ -197,6 +198,207 @@ const bookingToday = asyncErrorWrapper(async (req, res, next) => {
     })
 });
 
+const bookingPriceStatistic = asyncErrorWrapper(async (req, res, next) => {
+    var startOneDay = new Date();
+    startOneDay.setHours(0, 0, 0, 0);
+    var endOneDay = new Date();
+    endOneDay.setHours(23, 59, 59, 999);
+    //////////////////////////////////////
+    var startOneWeek = new Date();
+    startOneWeek.setHours(0, 0, 0, 0);
+    startOneWeek.setDate(startOneWeek.getDate() - 7);
+    var endOneWeek = new Date();
+    endOneWeek.setHours(23, 59, 59, 999);
+    //////////////////////////////////////
+    var startOneMonth = new Date();
+    startOneMonth.setHours(0, 0, 0, 0);
+    startOneMonth.setMonth(startOneMonth.getMonth() - 1);
+    var endOneMonth = new Date();
+    endOneMonth.setHours(23, 59, 59, 999);
+
+    //-------------TODAY----------------------------------------------
+    //todayTotalPrice
+    let aggregateTotalPriceToday = [
+        { $match: { createdAt: { $gte: startOneDay, $lte: endOneDay } } },
+        { $group: { _id: null, totalPrice: { $sum: "$totalPrice" } } }
+    ]
+
+    let todayTotalPrice = 0;
+    let totalPriceTodayService = await bookingService.aggregate(aggregateTotalPriceToday)
+    if (totalPriceTodayService.length > 0) {
+        todayTotalPrice = totalPriceTodayService[0].totalPrice
+    }
+
+
+    //todayAgencyCost
+    let aggregateAgencyCostToday = [
+        { $match: { createdAt: { $gte: startOneDay, $lte: endOneDay } } },
+        { $group: { _id: null, agencyCost: { $sum: "$agencyCost" } } }
+    ]
+
+    let agencyCostTodayService = await bookingService.aggregate(aggregateAgencyCostToday)
+    let todayAgencyCost = 0;
+    if (agencyCostTodayService.length > 0) {
+        todayAgencyCost = agencyCostTodayService[0].agencyCost
+    }
+
+
+    //todayBalance
+    let aggregateBalanceToday = [
+        { $match: { createdAt: { $gte: startOneDay, $lte: endOneDay } } },
+        { $group: { _id: null, balance: { $sum: "$balance" } } }
+    ]
+
+    let balanceTodayService = await bookingService.aggregate(aggregateBalanceToday)
+    let todayBalance = 0;
+    if (balanceTodayService.length > 0) {
+        todayBalance = balanceTodayService[0].balance
+    }
+
+
+    //-------------WEEK----------------------------------------------
+    //weekTotalPrice
+    let aggregateTotalPriceWeek = [
+        { $match: { createdAt: { $gte: startOneWeek, $lte: endOneWeek } } },
+        { $group: { _id: null, totalPrice: { $sum: "$totalPrice" } } }
+    ]
+
+    let totalPriceWeekService = await bookingService.aggregate(aggregateTotalPriceWeek)
+    let weekTotalPrice = 0
+    if (totalPriceWeekService.length > 0) {
+        weekTotalPrice = totalPriceWeekService[0].totalPrice
+    }
+
+    //weekAgencyCost
+    let aggregateAgencyCostWeek = [
+        { $match: { createdAt: { $gte: startOneWeek, $lte: endOneWeek } } },
+        { $group: { _id: null, agencyCost: { $sum: "$agencyCost" } } }
+    ]
+
+    let agencyCostWeekService = await bookingService.aggregate(aggregateAgencyCostWeek)
+    let weekAgencyCost = 0
+    if (agencyCostWeekService.length > 0) {
+        weekAgencyCost = agencyCostWeekService[0].agencyCost
+    }
+
+
+    //weekBalance
+    let aggregateBalanceWeek = [
+        { $match: { createdAt: { $gte: startOneWeek, $lte: endOneWeek } } },
+        { $group: { _id: null, balance: { $sum: "$balance" } } }
+    ]
+
+    let balanceWeekService = await bookingService.aggregate(aggregateBalanceWeek)
+    let weekBalance = 0
+    if (balanceWeekService.length > 0) {
+        weekBalance = balanceWeekService[0].balance
+    }
+
+
+
+    //-------------MONTH----------------------------------------------
+    //monthTotalPrice
+    let aggregateTotalPriceMonth = [
+        { $match: { createdAt: { $gte: startOneMonth, $lte: endOneMonth } } },
+        { $group: { _id: null, totalPrice: { $sum: "$totalPrice" } } }
+    ]
+
+    let totalPriceMonthService = await bookingService.aggregate(aggregateTotalPriceMonth)
+    let monthTotalPrice = 0
+    if (totalPriceMonthService.length > 0) {
+        monthTotalPrice = totalPriceMonthService[0].totalPrice
+    }
+
+
+    //monthAgencyCost
+    let aggregateAgencyCostMonth = [
+        { $match: { createdAt: { $gte: startOneMonth, $lte: endOneMonth } } },
+        { $group: { _id: null, agencyCost: { $sum: "$agencyCost" } } }
+    ]
+
+    let agencyCostMonthService = await bookingService.aggregate(aggregateAgencyCostMonth)
+    let monthAgencyCost = 0
+    if (agencyCostMonthService.length > 0) {
+        monthAgencyCost = agencyCostMonthService[0].agencyCost
+    }
+
+
+    //monthBalance
+    let aggregateBalanceMonth = [
+        { $match: { createdAt: { $gte: startOneMonth, $lte: endOneMonth } } },
+        { $group: { _id: null, balance: { $sum: "$balance" } } }
+    ]
+
+    let balanceMonthService = await bookingService.aggregate(aggregateBalanceMonth)
+    let monthBalance = 0
+    if (balanceMonthService.length > 0) {
+        monthBalance = balanceMonthService[0].balance
+    }
+
+
+
+    //-------------ALL----------------------------------------------
+    //monthTotalPrice
+    let aggregateTotalPriceAll= [
+        { $group: { _id: null, totalPrice: { $sum: "$totalPrice" } } }
+    ]
+
+    let totalPriceAllService = await bookingService.aggregate(aggregateTotalPriceAll)
+    let allTotalPrice = 0
+    if (totalPriceAllService.length > 0) {
+        allTotalPrice = totalPriceAllService[0].totalPrice
+    }
+
+
+    //monthAgencyCost
+    let aggregateAgencyCostAll = [
+        { $group: { _id: null, agencyCost: { $sum: "$agencyCost" } } }
+    ]
+
+    let agencyCostAllService = await bookingService.aggregate(aggregateAgencyCostAll)
+    let allAgencyCost = 0
+    if (agencyCostAllService.length > 0) {
+        allAgencyCost = agencyCostAllService[0].agencyCost
+    }
+
+
+    //monthBalance
+    let aggregateBalanceAll = [
+        { $group: { _id: null, balance: { $sum: "$balance" } } }
+    ]
+
+    let balanceAllService = await bookingService.aggregate(aggregateBalanceAll)
+    let allBalance = 0
+    if (balanceAllService.length > 0) {
+        allBalance = balanceAllService[0].balance
+    }
+
+
+    res.json({
+        success: true,
+        today: {
+            todayTotalPrice,
+            todayAgencyCost,
+            todayBalance,
+        },
+        week: {
+            weekTotalPrice,
+            weekAgencyCost,
+            weekBalance,
+        },
+        month: {
+            monthTotalPrice,
+            monthAgencyCost,
+            monthBalance,
+        },
+        all: {
+            allTotalPrice,
+            allAgencyCost,
+            allBalance,
+        }
+    })
+});
+
 function calculateAgencyCost(booking) {
 
     console.log("booking -->", booking);
@@ -210,6 +412,7 @@ function calculateAgencyCost(booking) {
 module.exports = {
     createBooking,
     getAllbookingsbyagency,
+    bookingPriceStatistic,
     updateBooking,
     getBooking,
     getBookingCruiseId,

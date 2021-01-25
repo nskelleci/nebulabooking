@@ -9,6 +9,10 @@ class BookingService extends BaseService {
     async findToday(options){
         return this.model.find(options.filter).populate(options.populate).sort( { "createdAt": -1 } );
     }
+
+    async aggregate(options){
+        return this.model.aggregate(options).sort( { "createdAt": -1 } );
+    }
     
 }
 
