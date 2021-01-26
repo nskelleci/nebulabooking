@@ -100,21 +100,19 @@ class PriceFrontEnd extends Calculate {
     }
 
     threeAndFourPassengerCabin() {
-        let adltCount = 0;
         let totalPayment = 0;
         if (this.adultCount + this.childCount <= 4) {
             for (let index = 0; index < this.adultCount; index++) {
                 if (this.isRos) {
                     totalPayment += Number(this.rosPrice);
                 } else {
-                    if (adltCount > 2) {
-                        adltCount++;
+                    if (index >= 2) {
                         totalPayment += (Number(this.price) - (Number(this.price) * (0.4)));
                         console.log("this.price",this.price);
                         console.log("this.tax",this.tax);
                         totalPayment += this.tax;
+                        
                     } else {
-                        adltCount++;
                         totalPayment += Number(this.price);
                         totalPayment += Number(this.tax);
                     }
@@ -223,22 +221,17 @@ class PriceBackEnd extends Calculate {
             if (this.isRos) {
                 totalPayment += Number(this.rosPrice);
             } else {
-                if (adultCount > 2) {
-                    if (age) {
-                        adultCount++;
+                if (age) {
+                    adultCount++;
+                    if (adultCount > 2) {
                         totalPayment += (Number(this.price) - (Number(this.price) * (0.4)));
                         totalPayment += Number(this.tax);
-                    } else {
+                    }else{
+                        totalPayment += Number(this.price);
                         totalPayment += Number(this.tax);
                     }
                 } else {
-                    if (age) {
-                        adultCount++;
-                        totalPayment += Number(this.price);
-                        totalPayment += Number(this.tax);
-                    } else {
-                        totalPayment += Number(this.tax);
-                    }
+                    totalPayment += Number(this.tax);
                 }
             }
 

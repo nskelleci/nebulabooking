@@ -20,6 +20,7 @@ const booking = require("./bookings")
 const logout = require("./logout")
 const blockedCabins = require("./blockedCabin")
 const adminDashboard = require("./admin-dashboard")
+const paymentRequest = require("./payment-request-router")
 //  /api
 const {getAccessToRoute} = require("../middlewares/authorization/auth");
 
@@ -41,6 +42,7 @@ router.use("/passenger",getAccessToRoute,passenger)
 router.use("/season",getAccessToRoute, season)
 router.use("/market", getAccessToRoute,market)
 router.use("/booking",booking)
+router.use("/paymentRequest",paymentRequest)
 router.use("/logout",logout)
 
 module.exports = router;
