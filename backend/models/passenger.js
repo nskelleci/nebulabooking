@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+var uniqueValidator = require('mongoose-unique-validator');
 
 const Schema = mongoose.Schema;
 
@@ -17,11 +18,15 @@ const PassengerSchema = new Schema({
     },
     passportNo : {
         type : String,
-        required : [true,"Please enter PASSPORT NUMBER"]
+        required : [true,"Please enter PASSPORT NUMBER"],
+        unique: true,
+        sparse: true
     },
     InternationalIdNo : {
         type : String,
-        required : [true,"Please enter International ID Number"]
+        required : [true,"Please enter International ID Number"],
+        unique: true,
+        sparse: true
     },
     passportExpiryDate : {
         type : Date,
@@ -44,5 +49,5 @@ const PassengerSchema = new Schema({
         ref : "Booking"
     }]
 })
-
+PassengerSchema.plugin(uniqueValidator);
 module.exports = mongoose.model("Passenger", PassengerSchema)

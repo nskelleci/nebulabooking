@@ -13,7 +13,7 @@ const addPassenger = asyncErrorWrapper( async (req,res,next) =>{
 
     const addedPassenger = await passengerService.add(passenger);
 
-    //if(!cruise) return next(new CustomError("Country Couldn't add",400));
+    if(!addedPassenger) return next(new CustomError("Passport No or InternationalIdNo to be unique",400));
 
     res.json({
         success : true,

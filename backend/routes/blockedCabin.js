@@ -5,7 +5,7 @@ const {addBlockedCabin, getAllblockedCabins,getAllBlockedCabinsByCruise, updateB
 
 router.get("/getAll",getAllblockedCabins)
 router.post("/add", addBlockedCabin)
-router.put("/update/:id", updateBlockedCabin)
+router.put("/update", updateBlockedCabin)
 router.get("/cruise/:cruiseId/", getAllBlockedCabinsByCruise)
 router.post("/cabin/", getBlockedCabin)
 

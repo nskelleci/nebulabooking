@@ -23,8 +23,15 @@ const addBlockedCabin = asyncErrorWrapper( async(req,res,next)=>{
 });
 
 const updateBlockedCabin = asyncErrorWrapper( async(req,res,next)=>{
-
-    const updatedBlockedCabin = await blockedCabinService.update(req.params.id, req.body)
+    //console.log("----------->",req.body);
+    const options = {
+        filter :{cruise:req.body.cruise, cabin:req.body.cabin},
+    }
+    const blockedCabin = await blockedCabinService.findOneby(options)
+    //console.log("blockedCabin----------->",blockedCabin);
+    
+    blockedCabin.blockReason = req.body.blockReason
+    const updatedBlockedCabin = await blockedCabinService.update(blockedCabin._id, blockedCabin)
 
     if(!updatedBlockedCabin) return next(new CustomError("Blocked cabin couldn't updated"),400)
 
@@ -33,6 +40,7 @@ const updateBlockedCabin = asyncErrorWrapper( async(req,res,next)=>{
         message : "Blocked Cabin Updated Successfully",
         data : updatedBlockedCabin
     })
+    
 
 });
 
